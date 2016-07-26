@@ -1,0 +1,49 @@
+<html>
+<head>
+  <title>Postcard Test</title>
+  <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css"/>
+  <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+      <script src="jquery-2.1.1.min.js"></script>
+
+  <style>
+    #map{ height: 100% }
+  </style>
+</head>
+<body>
+
+  <div id="map"></div>
+
+  <script>
+
+// initialize the map
+  var map = L.map('map').setView([41.58, -71.47], 10);
+
+// load a tile layer
+  L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    {
+      attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+      maxZoom: 19,
+      minZoom: 9
+    }).addTo(map);
+      
+$.getJSON("testmap.geojson",function(data){
+  var pinIcon = L.icon({
+    iconUrl: 'images/marker-icon.png',
+    
+  });
+    
+    
+  L.geoJson(data,{
+    pointToLayer: function(feature,latlng){
+  var marker = L.marker(latlng,{icon: pinIcon});
+        
+  marker.bindPopup ('<img src="'+ feature.properties.Filename1 +'" width="400" />' + '<br/>' + feature.properties.Description + '<br/>'  + feature.properties.Date);
+  return marker;
+}
+  }).addTo(map);
+});
+
+
+  </script>
+</body>
+</html>
